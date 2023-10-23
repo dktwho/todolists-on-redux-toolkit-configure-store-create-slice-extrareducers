@@ -16,9 +16,13 @@ const slice = createSlice({
     removeTask: (state, action: PayloadAction<{ taskId: string; todolistId: string }>) => {},
   },
   extraReducers: (builder) => {
-    builder.addCase(todolistsActions.addTodolist, (state, action) => {
-      state[action.payload.todolist.id] = []
-    })
+    builder
+      .addCase(todolistsActions.addTodolist, (state, action) => {
+        state[action.payload.todolist.id] = []
+      })
+      .addCase(todolistsActions.removeTodolist, (state, action) => {
+        delete state[action.payload.id]
+      })
   },
 })
 
@@ -38,12 +42,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
           t.id === action.taskId ? { ...t, ...action.model } : t,
         ),
       }
-    case "ADD-TODOLIST":
-      return { ...state, [action.todolist.id]: [] }
-    case "REMOVE-TODOLIST":
-      const copyState = { ...state }
-      delete copyState[action.id]
-      return copyState
+
     case "SET-TODOLISTS": {
       const copyState = { ...state }
       action.todolists.forEach((tl: any) => {
