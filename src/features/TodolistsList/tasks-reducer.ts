@@ -4,8 +4,23 @@ import { AppThunk } from "../../app/store"
 
 import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils"
 import { appActions } from "../../app/app-reducer"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { todolistsActions } from "./todolists-reducer"
 
 const initialState: TasksStateType = {}
+
+const slice = createSlice({
+  name: "tasks",
+  initialState: {} as TasksStateType,
+  reducers: {
+    removeTask: (state, action: PayloadAction<{ taskId: string; todolistId: string }>) => {},
+  },
+  extraReducers: (builder) => {
+    builder.addCase(todolistsActions.addTodolist, (state, action) => {
+      state[action.payload.todolist.id] = []
+    })
+  },
+})
 
 export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
   switch (action.type) {
@@ -143,3 +158,6 @@ type ActionsType =
   | ReturnType<typeof updateTaskAC>
   | ReturnType<typeof setTasksAC>
   | any
+
+export const tasksReducers = slice.reducer
+export const tasksActions = slice.actions
