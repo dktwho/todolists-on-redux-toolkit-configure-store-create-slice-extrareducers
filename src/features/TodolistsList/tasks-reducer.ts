@@ -44,8 +44,8 @@ const slice = createSlice({
           state[tl.id] = []
         })
       })
-      .addCase(clearTasksAndTodolists.type, () => {
-        return {}
+      .addCase(clearTasksAndTodolists, (state, action) => {
+        return action.payload.tasks
       })
   },
 })
