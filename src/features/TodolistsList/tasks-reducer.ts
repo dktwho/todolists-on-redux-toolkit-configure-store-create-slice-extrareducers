@@ -23,6 +23,11 @@ const slice = createSlice({
       .addCase(todolistsActions.removeTodolist, (state, action) => {
         delete state[action.payload.id]
       })
+      .addCase(todolistsActions.setTodolists, (state, action) => {
+        action.payload.todolists.forEach((tl) => {
+          state[tl.id] = []
+        })
+      })
   },
 })
 
@@ -43,13 +48,6 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         ),
       }
 
-    case "SET-TODOLISTS": {
-      const copyState = { ...state }
-      action.todolists.forEach((tl: any) => {
-        copyState[tl.id] = []
-      })
-      return copyState
-    }
     case "SET-TASKS":
       return { ...state, [action.todolistId]: action.tasks }
     default:
